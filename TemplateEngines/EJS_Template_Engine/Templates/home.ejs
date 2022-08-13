@@ -9,9 +9,14 @@
             font-size:5em;
         }
     </style>
+    <%- include('../Partials/head'); %>
 </head>
  
 <body>
+    <header>
+        <%- include('../Partials/header', {Page: 'home'}); %>
+    </header>
+    
     Hobbies of <%=data.name%> are:<br/>
      
     <ul>
@@ -21,4 +26,7 @@
     </ul>
 </body>
  
+<footer>
+    <%- include('../Partials/footer'); %>
+  </footer>
 </html>

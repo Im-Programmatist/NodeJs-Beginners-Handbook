@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 let app = express();
 
 // Set EJS as templating engine
-const template_path = path.join(__dirname,'templates')
+const template_path = path.join(__dirname,'/TemplateEngines/EJS/Templates')
 app.set('view engine', 'ejs');
 app.set('views', template_path); 
 //Or simply we can set view folder path - app.set('views', './templates');
@@ -31,11 +31,32 @@ app.set('views', template_path);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.get('/', function(req, res) {
+app.get('/home', function(req, res) {
 	var data = {name:'Chetan',
     hobbies:['Reading books', 'Playing Ckicket', 'Watching Movie']}
 	res.render('home', {data:data});
 	//res.send('<h1>Welcome to Node.js </h1>')
+});
+// use res.render to load up an ejs view file
+
+// index page
+app.get('/', function(req, res) {
+	var mascots = [
+		{ name: 'Sammy', organization: "DigitalOcean", birth_year: 2012},
+		{ name: 'Tux', organization: "Linux", birth_year: 1996},
+		{ name: 'Moby Dock', organization: "Docker", birth_year: 2013}
+	];
+	var tagline = "No programming concept is complete without a cute animal mascot.";
+
+	res.render('index', {
+		mascots: mascots,
+		tagline: tagline
+	});
+});
+
+// about page
+app.get('/about', function(req, res) {
+	res.render('about');
 });
 
 app.get('/user-http',function(req,res){
@@ -43,6 +64,7 @@ app.get('/user-http',function(req,res){
 	//res.end(JSON.stringify(users));
 	res.json(users);
 });
+
 app.get('/user-http/:id',function(req,res){
 	const found = Array.from(users).some(user => user.id === parseInt(req.params.id));
 	if(found){
