@@ -1,0 +1,21 @@
+doctype html
+include ../Partials/head
+include ../Partials/header
+    h1 This page is produced by Jade engine
+    p some paragraph here..
+    h1= title
+    p Welcome to #{title}
+    ul
+    each item in studentList
+        li=item
+    
+    #container
+    - if (youAreUsingJade)
+        Vape juice are amazing
+    - else
+        Get on it!
+        Get on it!
+        Get on it!
+        Get on it!
+
+include ../Partials/footer

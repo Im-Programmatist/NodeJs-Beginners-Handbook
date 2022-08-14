@@ -7,12 +7,12 @@ export let users={};
 http.createServer(function(req, res){
     res.write("Hello world! at 8080");
     res.end();
-}).listen(8080);
+}).listen(7000);
 
 http.createServer(function(req, res){
     res.write("Hello world! at 8081");
     res.end();
-}).listen(8081);
+}).listen(7001);
 
 export const getHttpExample = get('https://jsonplaceholder.typicode.com/users', res => {
     let data = [];

@@ -4,7 +4,7 @@ import express from 'express';
 import path  from 'path';
 import { fileURLToPath } from 'url';
 import {users } from './httpRequest.js';
-
+import mysql from "mysql";
 
 //port set to listen
 const port = 5000;
@@ -17,12 +17,41 @@ const __dirname = path.dirname(__filename);
  * Where "express()" is just like class and app is it's newly created object.
  */
 let app = express();
+let app_ejs = express();
+let app_jade = express();
+let app_pug = express();
+
+//Run app at port localhost on server  
+app.listen(port_default, '0.0.0.0', () => {
+	console.log(`Node App Listening At http://localhost:${port_default}`)
+});
+
+//Run app at port localhost on server  
+app_ejs.listen(5001, '0.0.0.0', () => {
+	console.log(`Node App With EJS Template Listening At http://localhost:5001`)
+});
+
+//Run app at port localhost on server  
+app_jade.listen(5002, '0.0.0.0', () => {
+	console.log(`Node App With Jade Template Listening At http://localhost:5002`)
+});
+
+//Run app at port localhost on server  
+app_pug.listen(5003, '0.0.0.0', () => {
+	console.log(`Node App With Pug Template Listening At http://localhost:5003`)
+});
 
 // Set EJS as templating engine
-const template_path = path.join(__dirname,'/TemplateEngines/EJS/Templates')
-app.set('view engine', 'ejs');
-app.set('views', template_path); 
+const template_path_ejs = path.join(__dirname,'/TemplateEngines/EJS/Templates')
+app_ejs.set('view engine', 'ejs');
+app_ejs.set('views', template_path_ejs); 
 //Or simply we can set view folder path - app.set('views', './templates');
+const template_path_jade = path.join(__dirname,'/TemplateEngines/Jade/Templates')
+app_jade.set('view engine', 'jade');
+app_jade.set('views', template_path_jade); 
+const template_path_pug = path.join(__dirname,'/TemplateEngines/Pug/Templates')
+app_pug.set('view engine', 'pug');
+app_pug.set('views', template_path_pug); 
 
 /*Instead use below code*/
 //We do not need this express.json() parser for GET AND DELETE request,
@@ -31,16 +60,9 @@ app.set('views', template_path);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.get('/home', function(req, res) {
-	var data = {name:'Chetan',
-    hobbies:['Reading books', 'Playing Ckicket', 'Watching Movie']}
-	res.render('home', {data:data});
-	//res.send('<h1>Welcome to Node.js </h1>')
-});
-// use res.render to load up an ejs view file
-
+//*****************************START EJS Template Engine ********************************/
 // index page
-app.get('/', function(req, res) {
+app_ejs.get('/', function(req, res) {
 	var mascots = [
 		{ name: 'Sammy', organization: "DigitalOcean", birth_year: 2012},
 		{ name: 'Tux', organization: "Linux", birth_year: 1996},
@@ -53,11 +75,62 @@ app.get('/', function(req, res) {
 		tagline: tagline
 	});
 });
-
+app_ejs.get('/home', function(req, res) {
+	var data = {name:'Chetan',
+    hobbies:['Reading books', 'Playing Ckicket', 'Watching Movie']}
+	res.render('home', {data:data});
+	//res.send('<h1>Welcome to Node.js </h1>')
+});
+// use res.render to load up an ejs view file
 // about page
-app.get('/about', function(req, res) {
+app_ejs.get('/about', function(req, res) {
 	res.render('about');
 });
+
+//***************************** END EJS Template Engine ********************************/
+
+//***************************** START Jade Template Engine ********************************/
+app_jade.get('/', function(req, res) {
+	/*Always remember if you are creating head, header index and footer files then remove all intentetion in files*/
+	const studentList = ["Chetan", "Korde", "Patil"];
+	res.render('index', { studentList, title: 'Express' });
+	// var con = mysql.createConnection({
+	// 	host: "localhost",
+	// 	user: "root",
+	// 	password: "",
+    //     database: 'showStudent' 
+	// });
+
+	// con.connect(function(err) {
+	// 	if (err) throw err;
+	// 	console.log("Connected!");
+
+	// 	con.query("SELECT * FROM student", function (err, result, fields) {
+	// 		if (err) throw err;
+	// 		console.log(result);
+	// 		res.render('index', { studentList: result });
+	// 	});
+	// });
+
+	// con.end(function(err) {
+	// 	if (err) {
+	// 	  return console.log('error:' + err.message);
+	// 	}
+	// 	console.log('Close the database connection.');
+	// });
+
+	// con.destroy();
+});
+
+//***************************** END Jade Template Engine ********************************/
+
+//***************************** START Pug Template Engine ********************************/
+app_pug.get('/',function(req,res){
+	res.render('index');
+});
+//***************************** END Pug Template Engine ********************************/
+
+//***************************** START APP Template Engine ********************************/
 
 app.get('/user-http',function(req,res){
 	//console.log("users",users);
@@ -88,9 +161,4 @@ app.get('/user-http/:id',function(req,res){
 		res.json(users);
 	}
 });
-//Run app at port localhost on server  
-app.listen(port_default, '0.0.0.0', () => {
-	console.log(`Node App Listening At http://localhost:${port_default}`)
-});
-
 
