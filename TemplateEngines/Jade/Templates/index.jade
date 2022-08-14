@@ -1,6 +1,7 @@
 doctype html
 include ../Partials/head
-include ../Partials/header
+include ../Partials/header  
+div.container.mt-2#divID
     h1 This page is produced by Jade engine
     p some paragraph here..
     h1= title
@@ -10,12 +11,10 @@ include ../Partials/header
         li=item
     
     #container
-    - if (youAreUsingJade)
-        Vape juice are amazing
+    - if (engineType=='jade')
+        span this is jade template engine (if)
     - else
-        Get on it!
-        Get on it!
-        Get on it!
-        Get on it!
+        span this is not jade template engine (else)
+
 
 include ../Partials/footer

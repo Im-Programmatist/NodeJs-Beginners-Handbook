@@ -4,6 +4,7 @@ import express from 'express';
 import path  from 'path';
 import { fileURLToPath } from 'url';
 import {users } from './httpRequest.js';
+import hbs from 'hbs';
 import mysql from "mysql";
 
 //port set to listen
@@ -20,25 +21,31 @@ let app = express();
 let app_ejs = express();
 let app_jade = express();
 let app_pug = express();
+let app_hbs = express();
 
 //Run app at port localhost on server  
 app.listen(port_default, '0.0.0.0', () => {
 	console.log(`Node App Listening At http://localhost:${port_default}`)
 });
 
-//Run app at port localhost on server  
+//Run app EJS
 app_ejs.listen(5001, '0.0.0.0', () => {
 	console.log(`Node App With EJS Template Listening At http://localhost:5001`)
 });
 
-//Run app at port localhost on server  
+//Run app Jade
 app_jade.listen(5002, '0.0.0.0', () => {
 	console.log(`Node App With Jade Template Listening At http://localhost:5002`)
 });
 
-//Run app at port localhost on server  
+//Run app Pug  
 app_pug.listen(5003, '0.0.0.0', () => {
 	console.log(`Node App With Pug Template Listening At http://localhost:5003`)
+});
+
+//Run app Handlebars  
+app_hbs.listen(5004, '0.0.0.0', () => {
+	console.log(`Node App With Handlebars Template Listening At http://localhost:5004`)
 });
 
 // Set EJS as templating engine
@@ -46,12 +53,20 @@ const template_path_ejs = path.join(__dirname,'/TemplateEngines/EJS/Templates')
 app_ejs.set('view engine', 'ejs');
 app_ejs.set('views', template_path_ejs); 
 //Or simply we can set view folder path - app.set('views', './templates');
+
 const template_path_jade = path.join(__dirname,'/TemplateEngines/Jade/Templates')
 app_jade.set('view engine', 'jade');
 app_jade.set('views', template_path_jade); 
+
 const template_path_pug = path.join(__dirname,'/TemplateEngines/Pug/Templates')
 app_pug.set('view engine', 'pug');
 app_pug.set('views', template_path_pug); 
+
+const template_path_hbs = path.join(__dirname,'/TemplateEngines/Handlebars/Templates')
+const partial_path_hbs = path.join(__dirname, '/TemplateEngines/Handlebars/Partials');  
+app_hbs.set('view engine', 'hbs');
+app_hbs.set('views', template_path_hbs); 
+hbs.registerPartials(partial_path_hbs);
 
 /*Instead use below code*/
 //We do not need this express.json() parser for GET AND DELETE request,
@@ -63,16 +78,16 @@ app.use(express.urlencoded({extended: true}));
 //*****************************START EJS Template Engine ********************************/
 // index page
 app_ejs.get('/', function(req, res) {
-	var mascots = [
-		{ name: 'Sammy', organization: "DigitalOcean", birth_year: 2012},
-		{ name: 'Tux', organization: "Linux", birth_year: 1996},
-		{ name: 'Moby Dock', organization: "Docker", birth_year: 2013}
+	var users = [
+		{ name: 'Chetan', company: "Google", age: 25},
+		{ name: 'Patil', company: "Amazon", age: 30},
+		{ name: 'Korde', company: "Microsoft", age: 35}
 	];
-	var tagline = "No programming concept is complete without a cute animal mascot.";
+	var line = "EJS is likely same as hbs template engine ";
 
 	res.render('index', {
-		mascots: mascots,
-		tagline: tagline
+		users,
+		line
 	});
 });
 app_ejs.get('/home', function(req, res) {
@@ -93,7 +108,7 @@ app_ejs.get('/about', function(req, res) {
 app_jade.get('/', function(req, res) {
 	/*Always remember if you are creating head, header index and footer files then remove all intentetion in files*/
 	const studentList = ["Chetan", "Korde", "Patil"];
-	res.render('index', { studentList, title: 'Express' });
+	res.render('index', { studentList, title: 'Express', engineType:'jade' });
 	// var con = mysql.createConnection({
 	// 	host: "localhost",
 	// 	user: "root",
@@ -126,9 +141,25 @@ app_jade.get('/', function(req, res) {
 
 //***************************** START Pug Template Engine ********************************/
 app_pug.get('/',function(req,res){
-	res.render('index');
+	res.render('index', {
+		subject: 'Pug template engine',
+		name: 'index',
+		link: 'https://google.com'
+	});
 });
 //***************************** END Pug Template Engine ********************************/
+
+//***************************** START Handlebars Template Engine ********************************/
+
+app_hbs.get('/', (req, res) => {
+	res.render('index', {
+		subject: 'hbs template engine',
+		name: 'our template',
+		link: 'https://google.com'
+	});
+});
+
+//***************************** END Handlebars Template Engine ********************************/
 
 //***************************** START APP Template Engine ********************************/
 
