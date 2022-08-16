@@ -1,1 +1,0 @@
-Testing write file sync method of fs module, 3 here we have Appended data 2

@@ -1,5 +1,6 @@
 // import the file system module
 import fs, { openSync } from 'fs';
+import ok from "okay";
 
 const dir = './file_module';
 if(!fs.existsSync(dir)) 
@@ -42,6 +43,10 @@ fs.open(dir+'/test.txt', 'w+', function (err, f) {
    console.log("File opened!!");    
 });
 
+fs.readFile(dir+'/tasks.txt', 'utf8', ok(function(contents) {
+    console.log("with ok model - ",contents);
+}));
+
 if(fs.existsSync(dir+'/test.txt')) 
     fs.unlinkSync(dir+'/test.txt', (err) => {
         console.log("file test.txt deleted");
@@ -50,4 +55,3 @@ if(fs.existsSync(dir+'/tasks.txt'))
     fs.unlinkSync(dir+'/tasks.txt', (err) => {
         console.log("file tasks.txt deleted");
     });
-
