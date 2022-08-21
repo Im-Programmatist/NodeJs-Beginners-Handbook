@@ -1,6 +1,8 @@
 // import the file system module
 import fs, { openSync } from 'fs';
 import ok from "okay";
+// imports a promise-based version of the readFile method
+const { readFile } = require(fs).promises
 
 const dir = './file_module';
 if(!fs.existsSync(dir)) 
