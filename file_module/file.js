@@ -1,8 +1,25 @@
 // import the file system module
-import fs, { openSync } from 'fs';
+import fs, { openSync, promises } from 'fs';
 import ok from "okay";
 // imports a promise-based version of the readFile method
-const { readFile } = require(fs).promises
+//const { readFile } = require(fs).promises
+const { readFile, writeFile } = promises;
+
+//Read and Write file using 
+writeFile("./GFG_Test.txt","adcblje lknvlwenv avwe")
+.then(function(result) {
+  console.log(""+result);
+})
+.catch(function(error) {
+   console.log(error);
+})
+readFile("GFG_Test.txt")
+.then(function(result) {
+  console.log(""+result);
+})
+.catch(function(error) {
+   console.log(error);
+})
 
 const dir = './file_module';
 if(!fs.existsSync(dir)) 

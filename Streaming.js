@@ -12,6 +12,7 @@
 
 import fs from "fs";
 import http from "http";
+import crypto from "crypto";
 
 const server = http.createServer();
 
@@ -46,3 +47,8 @@ server.listen(5000,(err)=>{
     console.log("server start at..localhost:5000");
 });
 
+const stdin = process.stdin.on('data', msg => console.log('cli input - ', msg))
+//const stdin = process.stdin
+//const stdout = process.stdout.on('data',msg => process.stdout.write(msg.toString().toUpperCase()));
+const stdout = process.stdout.write("crypto.randomBytes()")
+//stdin.pipe(stdout);

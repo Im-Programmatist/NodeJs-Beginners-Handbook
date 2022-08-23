@@ -2,3 +2,725 @@ India is a rich, diverse land of various cultures, castes, languages, religions,
 India has been the birthplace of many intelligent and peaceful people, and at the same time, 
 it is also the birthplace of many rebellious personalities. 
 It is impossible to pass school life without writing a paragraph on India.
+
+
+We have a large raw data file that we would like to trim to a specified size.
+
+How would I go about getting the first N lines of a text file in python? Will the OS being used have any effect on the implementation?
+
+python
+Share
+Follow
+edited May 15 at 14:31
+user avatar
+Braiam
+4,3221111 gold badges5151 silver badges7575 bronze badges
+asked Nov 20, 2009 at 0:09
+user avatar
+Russell
+17.1k2323 gold badges8080 silver badges124124 bronze badges
+can I give n as command line argument – 
+user6882757
+ Jul 23, 2019 at 9:07
+Add a comment
+19 Answers
+Sorted by:
+
+Highest score (default)
+
+314
+
+Python 3:
+
+with open("datafile") as myfile:
+    head = [next(myfile) for x in range(N)]
+print(head)
+Python 2:
+
+with open("datafile") as myfile:
+    head = [next(myfile) for x in xrange(N)]
+print head
+Here's another way (both Python 2 & 3):
+
+from itertools import islice
+
+with open("datafile") as myfile:
+    head = list(islice(myfile, N))
+print(head)
+Share
+Follow
+edited May 17 at 13:50
+user avatar
+Braiam
+4,3221111 gold badges5151 silver badges7575 bronze badges
+answered Nov 20, 2009 at 0:27
+user avatar
+John La Rooy
+284k5050 gold badges356356 silver badges498498 bronze badges
+1
+Thanks, that is very helpful indeed. What is the difference between the two? (in terms of performance, required libraries, compatibility etc)? – 
+Russell
+ Nov 20, 2009 at 0:34
+1
+I expect the performance to be similar, maybe the first to be slightly faster. But the first one won't work if the file doesn't have at least N lines. You are best to measure the performance against some typical data you will be using it with. – 
+John La Rooy
+ Nov 20, 2009 at 0:47
+1
+The with statement works on Python 2.6, and requires an extra import statement on 2.5. For 2.4 or earlier, you'd need to rewrite the code with a try...except block. Stylistically, I prefer the first option, although as mentioned the second is more robust for short files. – 
+Alasdair
+ Nov 20, 2009 at 1:21
+1
+islice is probably faster as it is implemented in C. – 
+Alice Purcell
+ Nov 20, 2009 at 6:45
+33
+Have in mind that if the files have less then N lines this will raise StopIteration exception that you must handle – 
+Ilian Iliev
+ Jan 25, 2012 at 12:44
+Show 10 more comments
+
+26
+
+N = 10
+with open("file.txt", "a") as file:  # the a opens it in append mode
+    for i in range(N):
+        line = next(file).strip()
+        print(line)
+Share
+Follow
+edited Apr 8, 2020 at 0:16
+user avatar
+AMC
+2,54777 gold badges1212 silver badges3434 bronze badges
+answered Nov 20, 2009 at 2:04
+user avatar
+ghostdog74
+312k5555 gold badges252252 silver badges339339 bronze badges
+3
+Why open the file in append mode? – 
+AMC
+ Apr 8, 2020 at 0:16
+@AMC I think it is for not deleting the file, but we should use 'r' here instead. – 
+Ekrem Dinçel
+ Aug 18, 2020 at 14:23 
+1
+@Kowalski Append mode is for adding to the file, r is indeed the more logical choice, I think. – 
+AMC
+ Aug 19, 2020 at 18:35
+@ghostdog74, how can read the next N values ? – 
+oleva
+ Dec 7, 2020 at 10:08
+Add a comment
+
+22
+
+If you want to read the first lines quickly and you don't care about performance you can use .readlines() which returns list object and then slice the list.
+
+E.g. for the first 5 lines:
+
+with open("pathofmyfileandfileandname") as myfile:
+    firstNlines=myfile.readlines()[0:5] #put here the interval you want
+Note: the whole file is read so is not the best from the performance point of view but it is easy to use, fast to write and easy to remember so if you want just perform some one-time calculation is very convenient
+
+print firstNlines
+One advantage compared to the other answers is the possibility to select easily the range of lines e.g. skipping the first 10 lines [10:30] or the lasts 10 [:-10] or taking only even lines [::2].
+
+Share
+Follow
+edited Apr 8, 2020 at 8:46
+answered Dec 7, 2013 at 12:59
+user avatar
+G M
+18.4k1010 gold badges7575 silver badges7979 bronze badges
+3
+The top answer is probably way more efficient, but this one works like a charm for small files. – 
+T.Chmelevskij
+ Nov 7, 2015 at 12:53
+2
+Note that this actually reads the whole file into a list first (myfile.readlines()) and then splices the first 5 lines of it. – 
+AbdealiJK
+ Oct 25, 2016 at 9:07
+5
+This should be avoided. – 
+anilbey
+ Nov 27, 2018 at 22:58
+1
+I see no reason to use this, it's not any simpler than the vastly more efficient solutions. – 
+AMC
+ Apr 8, 2020 at 0:17
+1
+@AMC thanks for the feedback, I use it in the console for exploring the data when I have to have a quick look to the first lines, it just saves me time in writing code. – 
+G M
+ Apr 8, 2020 at 8:27
+Show 2 more comments
+
+12
+
+What I do is to call the N lines using pandas. I think the performance is not the best, but for example if N=1000:
+
+import pandas as pd
+yourfile = pd.read_csv('path/to/your/file.csv',nrows=1000)
+Share
+Follow
+edited Aug 19, 2020 at 18:39
+user avatar
+AMC
+2,54777 gold badges1212 silver badges3434 bronze badges
+answered Apr 11, 2017 at 14:54
+user avatar
+RRuiz
+2,0391919 silver badges2626 bronze badges
+3
+Better would be to use the nrows option, which can be set to 1000 and the entire file isn't loaded. pandas.pydata.org/pandas-docs/stable/generated/… In general, pandas has this and other memory-saving techniques for big files. – 
+philshem
+ Apr 11, 2017 at 15:03 
+Yes, you are right. I just correct it. Sorry for the mistake. – 
+RRuiz
+ Apr 11, 2017 at 15:06
+1
+You may also want to add sep to define a column delimiter (which shouldn't occur in a non-csv file) – 
+philshem
+ Apr 11, 2017 at 15:09
+2
+@Cro-Magnon I cannot find the pandas.read() function in the documentation, do you know of any information on the subject? – 
+AMC
+ Apr 8, 2020 at 0:19
+Add a comment
+
+7
+
+There is no specific method to read number of lines exposed by file object.
+
+I guess the easiest way would be following:
+
+lines =[]
+with open(file_name) as f:
+    lines.extend(f.readline() for i in xrange(N))
+Share
+Follow
+edited Nov 20, 2009 at 0:58
+user avatar
+u0b34a0f6ae
+45.9k1414 gold badges8989 silver badges100100 bronze badges
+answered Nov 20, 2009 at 0:27
+user avatar
+artdanil
+4,64422 gold badges3131 silver badges4848 bronze badges
+This is something I had actually intended. Though, I though of adding each line to list. Thank you. – 
+artdanil
+ Nov 20, 2009 at 2:11
+Add a comment
+
+6
+
+The two most intuitive ways of doing this would be:
+
+Iterate on the file line-by-line, and break after N lines.
+
+Iterate on the file line-by-line using the next() method N times. (This is essentially just a different syntax for what the top answer does.)
+
+Here is the code:
+
+# Method 1:
+with open("fileName", "r") as f:
+    counter = 0
+    for line in f:
+        print line
+        counter += 1
+        if counter == N: break
+
+# Method 2:
+with open("fileName", "r") as f:
+    for i in xrange(N):
+        line = f.next()
+        print line
+The bottom line is, as long as you don't use readlines() or enumerateing the whole file into memory, you have plenty of options.
+
+Share
+Follow
+answered Mar 2, 2018 at 23:42
+user avatar
+FatihAkici
+4,23211 gold badge2727 silver badges4747 bronze badges
+The bottom line is, as long as you don't use readlines() or enumerateing the whole file into memory, you have plenty of options. Isn't enumerate() lazy? – 
+AMC
+ Aug 19, 2020 at 18:40
+Add a comment
+
+4
+
+Based on gnibbler top voted answer (Nov 20 '09 at 0:27): this class add head() and tail() method to file object.
+
+class File(file):
+    def head(self, lines_2find=1):
+        self.seek(0)                            #Rewind file
+        return [self.next() for x in xrange(lines_2find)]
+
+    def tail(self, lines_2find=1):  
+        self.seek(0, 2)                         #go to end of file
+        bytes_in_file = self.tell()             
+        lines_found, total_bytes_scanned = 0, 0
+        while (lines_2find+1 > lines_found and
+               bytes_in_file > total_bytes_scanned): 
+            byte_block = min(1024, bytes_in_file-total_bytes_scanned)
+            self.seek(-(byte_block+total_bytes_scanned), 2)
+            total_bytes_scanned += byte_block
+            lines_found += self.read(1024).count('\n')
+        self.seek(-total_bytes_scanned, 2)
+        line_list = list(self.readlines())
+        return line_list[-lines_2find:]
+Usage:
+
+f = File('path/to/file', 'r')
+f.head(3)
+f.tail(3)
+Share
+Follow
+answered Jan 20, 2011 at 19:42
+user avatar
+fdb
+1,97811 gold badge1919 silver badges2020 bronze badges
+Add a comment
+
+3
+
+most convinient way on my own:
+
+LINE_COUNT = 3
+print [s for (i, s) in enumerate(open('test.txt')) if i < LINE_COUNT]
+Solution based on List Comprehension The function open() supports an iteration interface. The enumerate() covers open() and return tuples (index, item), then we check that we're inside an accepted range (if i < LINE_COUNT) and then simply print the result.
+
+Enjoy the Python. ;)
+
+Share
+Follow
+edited Dec 7, 2011 at 9:03
+answered Dec 7, 2011 at 8:26
+user avatar
+Maxim Plaksin
+3122 bronze badges
+This just seems like a slightly more complex alternative to [next(file) for _ in range(LINE_COUNT)]. – 
+AMC
+ Apr 8, 2020 at 0:20
+Add a comment
+
+3
+
+For first 5 lines, simply do:
+
+N=5
+with open("data_file", "r") as file:
+    for i in range(N):
+       print file.next()
+Share
+Follow
+answered Oct 28, 2016 at 2:36
+user avatar
+Surya
+9,97644 gold badges5454 silver badges3636 bronze badges
+Add a comment
+
+2
+
+If you want something that obviously (without looking up esoteric stuff in manuals) works without imports and try/except and works on a fair range of Python 2.x versions (2.2 to 2.6):
+
+def headn(file_name, n):
+    """Like *x head -N command"""
+    result = []
+    nlines = 0
+    assert n >= 1
+    for line in open(file_name):
+        result.append(line)
+        nlines += 1
+        if nlines >= n:
+            break
+    return result
+
+if __name__ == "__main__":
+    import sys
+    rval = headn(sys.argv[1], int(sys.argv[2]))
+    print rval
+    print len(rval)
+Share
+Follow
+answered Nov 20, 2009 at 2:00
+user avatar
+John Machin
+79.2k1111 gold badges137137 silver badges182182 bronze badges
+Add a comment
+
+2
+
+If you have a really big file, and assuming you want the output to be a numpy array, using np.genfromtxt will freeze your computer. This is so much better in my experience:
+
+def load_big_file(fname,maxrows):
+'''only works for well-formed text file of space-separated doubles'''
+
+rows = []  # unknown number of lines, so use list
+
+with open(fname) as f:
+    j=0        
+    for line in f:
+        if j==maxrows:
+            break
+        else:
+            line = [float(s) for s in line.split()]
+            rows.append(np.array(line, dtype = np.double))
+            j+=1
+return np.vstack(rows)  # convert list of vectors to array
+Share
+Follow
+edited Nov 25, 2014 at 6:25
+answered Nov 25, 2014 at 5:00
+user avatar
+Alejandro D. Somoza
+37111 gold badge33 silver badges1919 bronze badges
+If you have a really big file, and assuming you want the output to be a numpy array That's quite a unique set of restrictions, I can't really see any advantages to this over the alternatives. – 
+AMC
+ Apr 8, 2020 at 0:22
+Add a comment
+
+1
+
+This worked for me
+
+f = open("history_export.csv", "r")
+line= 5
+for x in range(line):
+    a = f.readline()
+    print(a)
+Share
+Follow
+edited Aug 23, 2019 at 21:53
+user avatar
+Caconde
+3,61977 gold badges3232 silver badges3131 bronze badges
+answered Aug 23, 2019 at 19:18
+user avatar
+Sukanta
+3188 bronze badges
+Why not use a context manager? In any case, I don't see how this improves on the many existing answers. – 
+AMC
+ Apr 8, 2020 at 0:24 
+Add a comment
+
+1
+
+I would like to handle the file with less than n-lines by reading the whole file
+
+def head(filename: str, n: int):
+    try:
+        with open(filename) as f:
+            head_lines = [next(f).rstrip() for x in range(n)]
+    except StopIteration:
+        with open(filename) as f:
+            head_lines = f.read().splitlines()
+    return head_lines
+Credit go to John La Rooy and Ilian Iliev. Use the function for the best performance with exception handle
+
+Revise 1: Thanks FrankM for the feedback, to handle file existence and read permission we can futher add
+
+import errno
+import os
+
+def head(filename: str, n: int):
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), filename)  
+    if not os.access(filename, os.R_OK):
+        raise PermissionError(errno.EACCES, os.strerror(errno.EACCES), filename)     
+   
+    try:
+        with open(filename) as f:
+            head_lines = [next(f).rstrip() for x in range(n)]
+    except StopIteration:
+        with open(filename) as f:
+            head_lines = f.read().splitlines()
+    return head_lines
+You can either go with second version or go with the first one and handle the file exception later. The check is quick and mostly free from performance standpoint
+
+Share
+Follow
+edited Jul 10, 2021 at 13:03
+answered Jul 8, 2021 at 22:07
+user avatar
+Linh K Ha
+4122 bronze badges
+Well this isn't soundproof. Meaning if there is an exception, you try to read the file again, which could throw another exception. This works if the file exists and you got the permissions to read. If not it results in an exception. The accepted answer provides (solution 3) a variant which does the same using islice (reads the whole file, when it has fewer lines). But your solution is better than variant 1 and 2. – 
+FrankM
+ Jul 9, 2021 at 10:09
+Thanks @FrankM for the feedback, please see my revise answer – 
+Linh K Ha
+ Jul 10, 2021 at 13:06
+Add a comment
+
+0
+
+Starting at Python 2.6, you can take advantage of more sophisticated functions in the IO base clase. So the top rated answer above can be rewritten as:
+
+    with open("datafile") as myfile:
+       head = myfile.readlines(N)
+    print head
+(You don't have to worry about your file having less than N lines since no StopIteration exception is thrown.)
+
+Share
+Follow
+answered Dec 6, 2012 at 18:02
+user avatar
+Steve Bading
+12111 silver badge11 bronze badge
+27
+According to the docs N is the number of bytes to read, not the number of lines. – 
+Mark Mikofski
+ Jun 18, 2013 at 17:41
+4
+N is the number of bytes! – 
+qed
+ Jun 1, 2014 at 14:19
+5
+Wow. Talk about poor naming. The function name mentions lines but the argument refers to bytes. – 
+ArtOfWarfare
+ Apr 27, 2015 at 18:22
+Add a comment
+from itertools import islice
+
+with open('/tmp/filename.txt') as inf:
+    for line in islice(inf, N, N+M):
+        print(line)
+Share
+Follow
+answered Nov 11, 2019 at 23:09
+user avatar
+sandyp
+40255 silver badges1414 bronze badges
+This is virtually identical to the decade-old top answer. – 
+AMC
+ Apr 8, 2020 at 0:23
+Add a comment
+
+0
+
+
+fname = input("Enter file name: ")
+num_lines = 0
+
+with open(fname, 'r') as f: #lines count
+    for line in f:
+        num_lines += 1
+
+num_lines_input = int (input("Enter line numbers: "))
+
+if num_lines_input <= num_lines:
+    f = open(fname, "r")
+    for x in range(num_lines_input):
+        a = f.readline()
+        print(a)
+
+else:
+    f = open(fname, "r")
+    for x in range(num_lines_input):
+        a = f.readline()
+        print(a)
+        print("Don't have", num_lines_input, " lines print as much as you can")
+
+
+print("Total lines in the text",num_lines)
+
+Share
+Follow
+answered Apr 23, 2020 at 14:44
+user avatar
+Shakirul
+155 bronze badges
+Add a comment
+
+0
+
+Here's another decent solution with a list comprehension:
+
+file = open('file.txt', 'r')
+
+lines = [next(file) for x in range(3)]  # first 3 lines will be in this list
+
+file.close()
+Share
+Follow
+answered Nov 20, 2021 at 14:50
+user avatar
+Oleksandr Novik
+27144 silver badges1616 bronze badges
+How is this answer different from the accepted answer?! – 
+zardosht
+ Mar 15 at 10:52
+Add a comment
+
+-2
+
+#!/usr/bin/python
+
+import subprocess
+
+p = subprocess.Popen(["tail", "-n 3", "passlist"], stdout=subprocess.PIPE)
+
+output, err = p.communicate()
+
+print  output
+This Method Worked for me
+
+Share
+Follow
+edited Jul 12, 2017 at 16:58
+user avatar
+Eric Aya
+69k3434 gold badges176176 silver badges245245 bronze badges
+answered Jul 12, 2017 at 16:25
+user avatar
+Mansur Ul Hasan
+2,1422121 silver badges1919 bronze badges
+This isn't really a Python solution, though. – 
+AMC
+ Apr 8, 2020 at 0:23
+I do not even understand what is written in your answer. Please add some explanation. – 
+Nairum
+ Jun 30, 2020 at 13:09
+Add a comment
+
+-2
+
+Simply Convert your CSV file object to a list using list(file_data)
+
+import csv;
+with open('your_csv_file.csv') as file_obj:
+    file_data = csv.reader(file_obj);
+    file_list = list(file_data)
+    for row in file_list[:4]:
+        print(row)
+Share
+Follow
+answered Oct 4, 2021 at 13:23
+user avatar
+shivam singh
+1122 bronze badges
+Will be horribly slow for huge files, since you'll have to load every single line just to get first 4 of them – 
+Oleksandr Novik
+ Nov 20, 2021 at 14:52
+Add a comment
+Your Answer
+Sign up or log in
+Post as a guest
+Name
+Email
+Required, but never shown
+
+By clicking “Post Your Answer”, you agree to our terms of service, privacy policy and cookie policy
+
+Not the answer you're looking for? Browse other questions tagged python or ask your own question.
+The Overflow Blog
+The last technical interview you’ll ever take (Ep. 474)
+Combining the best of engineering cultures from Silicon Valley and Shanghai...
+Featured on Meta
+Planned maintenance scheduled for Tuesday, August 23, 2022 at 00:00-03:00 AM...
+Please welcome Valued Associate #1301 - Emerson
+Staging Ground Workflow: Question Lifecycle
+The [maintenance] tag is being burninated
+Announcing Design Accessibility Updates on SO
+Linked
+1
+Read first N lines using readlines
+1
+How can I read n lines from a txt file? n is given as input
+0
+Extract text in string until certain new line ("\n")
+0
+Python List comprehension run for loop N amount of times
+0
+reading N lines in python
+27
+How do you dynamically identify unknown delimiters in a data file?
+21
+Open a csv.gz file in Python and print first 100 rows
+15
+How to determine the delimiter in CSV file
+-2
+Incorrect output while reading text file in Python
+0
+returning value outside a for loop
+See more linked questions
+Related
+1042
+How to download a file over HTTP?
+6418
+How do I merge two dictionaries in a single expression?
+6717
+How do I check whether a file exists without exceptions?
+3178
+"Least Astonishment" and the Mutable Default Argument
+1653
+Proper way to declare custom exceptions in modern Python?
+1490
+Use different Python version with virtualenv
+1134
+Get the data received in a Flask request
+1795
+How do I split the definition of a long string over multiple lines?
+2780
+Why is "1000000000000000 in range(1000000000000001)" so fast in Python 3?
+Hot Network Questions
+Official recommendations for how early to reach the airport
+Old SciFi short story on debt to society and a brain ship
+How does the PFC Boost Circuit Work?
+As a TA, how much information should I share with the professor about students?
+SQL Server: What's the Difference Between a 'Singleton Lookup' and a 'User Lookup'?
+Will Starship get refueled in Mars orbit?
+What can a modern DAW do with analog sounds?
+How to structure sentences to be able to distinguish between verbs, nouns, and adjectives etc.?
+Why is pre-specification of punishment order necessary to manipulate compliance?
+What would the ancient Greeks called Herakles' bow and poisoned arrows? What would the Romans have called them?
+Can biscuit dough be left out at room temperature before baking?
+Globally removing engravers from LilyPond
+Information inequalities
+Meaning of "was not plainer in words than manner"
+Confused about MW to MWh conversion
+I'm on vacation in Vienna and was never asked to stamp my passport, what do I do?
+Does God consistently accept man’s repentance in the Old Testament?
+Should I admit to accidentally cheating on an exam?
+Why is hyponitrous acid H2N2O2 and not HNO?
+Why did God choose healing instead of taking away the serpents in Numbers 21:6?
+PhD salary (research assistant) did not increase during summer while working hours doubled, is this normal? (USA)
+Can you make the spacing around \middle separators the same as spacing around array lines?
+What is "Hadozee wavedashing"?
+What is the name of this concept involving hashes?
+ Question feed
+
+STACK OVERFLOW
+Questions
+Help
+PRODUCTS
+Teams
+Advertising
+Collectives
+Talent
+COMPANY
+About
+Press
+Work Here
+Legal
+Privacy Policy
+Terms of Service
+Contact Us
+Cookie Settings
+Cookie Policy
+STACK EXCHANGE NETWORK
+Technology
+Culture & recreation
+Life & arts
+Science
+Professional
+Business
+API
+Data
+Blog
+Facebook
+Twitter
+LinkedIn
+Instagram
+S
