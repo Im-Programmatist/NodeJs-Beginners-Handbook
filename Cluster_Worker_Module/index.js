@@ -14,7 +14,7 @@
  * Node is a single system which is responsible to store and process data. 
  * Whereas Cluster is a collection of multiple nodes which communicates with each other to perform set of operation
  * 
- * Cluster is use for SCALING NODE SERVER
+ * Cluster is use for SCALING NODE SERVER - SCALABILITY Achieve by using clustering
 */
 
 import express from "express";
