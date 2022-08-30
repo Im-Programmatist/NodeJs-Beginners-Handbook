@@ -13,7 +13,7 @@ import EventEmitter from "events";
 const event = new EventEmitter(); //Initialize constructor method and make new object of EventEmitter
 //register our own event
 event.on("MyEvent",()=>{
-    console.log("Function 1 : this is event listener callback, perform any action throughg this event");
+    console.log("Function 1 : this is event listener callback, perform any action through this event");
 });
 /**
  * we can call multiple callback functions in node (not possible in js) 
