@@ -27,8 +27,8 @@ using this wrapped function we can easyily use the modules and keywords inside n
     means module, __fileanme, export looks like global scope variable but they are actually module specific
 */
 (function(){
-    const innerName = "Chetan";
+    const innerName = "Chetan Korde";
     console.log(innerName);
 })
 //console.log(innerName); //Error - ReferenceError: innerName is not defined
-console.log(arguments);
+//console.log(arguments);
