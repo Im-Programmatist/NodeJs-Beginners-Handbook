@@ -13,6 +13,11 @@ import Calculators from './module-export.cjs';
 //name of export must be same
 import  {addition, subtract, multiply, divide}  from './exports.cjs'; 
 
+import bothExp from './bothExportInSameFile.cjs';
+console.log(bothExp);
+//console.log(bothExp.p);
+console.log(bothExp.print());
+
 const op = new Calculators(100,50);
  
 console.log(`Addition -> ${op.add()}`);
