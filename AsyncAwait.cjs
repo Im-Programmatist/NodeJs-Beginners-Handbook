@@ -1,3 +1,4 @@
+require('colors');
 function request(url,from) {
     console.log(`Request url ${url} and it is from ${from}`);
     return new Promise((resolve, reject) => {

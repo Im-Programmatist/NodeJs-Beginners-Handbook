@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "colors": "^1.4.0",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.6",
     "events": "^3.3.0",
