@@ -18,7 +18,8 @@ const pathname = '/a/b/c';
 const search = '?d=e';
 const hash = '#fgh';
 const myURL = new URL(`https://example.org${pathname}${search}${hash}`);
-
+myURL.port=1234.5289;
+console.log("port is - ",myURL.port);
 console.log(`URL Object Prints as - ${myURL}`);
 /*
 ABove console prints the URL Object -
