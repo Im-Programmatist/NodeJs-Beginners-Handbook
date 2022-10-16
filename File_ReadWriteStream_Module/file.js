@@ -74,3 +74,5 @@ if(fs.existsSync(dir+'/tasks.txt'))
     fs.unlinkSync(dir+'/tasks.txt', (err) => {
         console.log("file tasks.txt deleted");
     });
+console.log("dir - ",dir);
+fs.stat('../hello.txt', (data)=>{console.log(`data is of stat - ${data}`);});
