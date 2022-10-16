@@ -10,7 +10,6 @@ function request(url,from) {
         }, 500);
     });
 }
-
 function requestWithRetry(url, retryCount, currentTries = 1) 
 {
     console.log(url, retryCount, currentTries);
