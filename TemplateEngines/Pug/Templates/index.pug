@@ -1,0 +1,16 @@
+
+//must include all file inside body tag only - here body tag inside head file   
+include  ../Partials/head
+include  ../Partials/nav
+div.container.mt-2
+    header
+        h2 Welcome
+        p  Here is the homepage for #{name}
+    section
+        h2 Here is the body
+        p Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam, repellendus!
+    section
+        h2 Please refere this page to learn more about template engine
+        a(href='https://blog.logrocket.com/top-express-js-template-engines-for-dynamic-html-pages/') Click here
+    include  ../Partials/footer
+    //based on identation we can keep footer or any element inside/under parent of any div or outside of any div 

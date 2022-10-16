@@ -1,0 +1,20 @@
+doctype html
+include ../Partials/head
+include ../Partials/header  
+div.container.mt-2#divID
+    h1 This page is produced by Jade engine
+    p some paragraph here..
+    h1= title
+    p Welcome to #{title}
+    ul
+    each item in studentList
+        li=item
+    
+    #container
+    - if (engineType=='jade')
+        span this is jade template engine (if)
+    - else
+        span this is not jade template engine (else)
+
+
+include ../Partials/footer

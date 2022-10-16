@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <style type="text/css" media="screen">
+        body {
+            background-color: skyblue;
+            text-decoration-color: white;
+            font-size:5em;
+        }
+    </style>
+    <%- include('../Partials/head'); %>
+</head>
+ 
+<body>
+    <header>
+        <%- include('../Partials/header', {Page: 'home'}); %>
+    </header>
+    
+    Hobbies of <%=data.name%> are:<br/>
+     
+    <ul>
+        <% data.hobbies.forEach((item)=>{%>
+        <li><%=item%></li>
+        <%});%>
+    </ul>
+</body>
+ 
+<footer>
+    <%- include('../Partials/footer'); %>
+  </footer>
+</html>
