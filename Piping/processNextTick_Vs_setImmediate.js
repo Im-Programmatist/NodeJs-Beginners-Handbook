@@ -29,6 +29,10 @@
  * polling phase (fetching/taking code top to bottom)--->check Phase -->execution phase 
  * -->event loop initialization --->proccess.nextTick ---> setImmediate --->setTimeout/setInterval(based on the timer)
 */
+setTimeout(function E() {
+    console.log("1st zro timeout");
+},0);
+
 setImmediate(function A() {
     console.log("1st immediate");
 });
@@ -44,6 +48,19 @@ process.nextTick(function C() {
 process.nextTick(function D() {
     console.log("2nd process");
 });
+
+setTimeout(function F() {
+    console.log("2st timeout");
+},100);
   
+setTimeout(function G() {
+    //doing I/O operations
+    let sum = 0;
+    while (sum < 10e3) {
+        sum = sum + 100;
+    }
+    console.log("3st zro timeout");
+},0);
+
 // First event queue ends here
 console.log("program started");
