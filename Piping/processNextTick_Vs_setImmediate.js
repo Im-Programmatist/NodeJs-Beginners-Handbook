@@ -51,7 +51,7 @@ process.nextTick(function D() {
 
 setTimeout(function F() {
     console.log("2st timeout");
-},100);
+},7000);
   
 setTimeout(function G() {
     //doing I/O operations
@@ -62,5 +62,40 @@ setTimeout(function G() {
     console.log("3st zro timeout");
 },0);
 
+setInterval(()=>{
+    console.log("1st Interval with 10sec time");
+},10000)
 // First event queue ends here
 console.log("program started");
+
+/**
+ * Every recursive call of process.nextTick() will prevent event loop i/o operation and there will be starvation for i/o
+ * TO avaoid starvation in execution of event loop we must use timeout and immediate 
+ * 
+*/
+/*example of processTick block execution of event loop*/
+// let count = 0;
+// const cp = () =>{
+//     console.log(`Processing nextTick cb ${++count}`); //this will continouesly run not allow to run immediate and timeout at all.
+//     process.nextTick(cp);
+// }
+// setImmediate(()=>{
+//     console.log(`Set Immediate is called ` );
+// });
+// setTimeout(()=>{
+//     console.log(`Set Timeout is called ` );
+// },1000);
+// process.nextTick(cp);
+// console.log(`Start Of testing process nexttick performance....`);
+
+//Example of SetImmediate - this will allow settimeout to call even in recursive calling.
+let count2 = 0;
+const cpImm = () =>{
+    console.log(`SetImmediate calling cb - ${++count2}`); //this will continouesly run not allow to run immediate and timeout at all.
+    setImmediate(cpImm);
+}
+setImmediate(cpImm);
+setTimeout(()=>{
+    console.log(`Set Timeout is called ` );
+},5000);
+
