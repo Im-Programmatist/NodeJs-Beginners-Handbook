@@ -5,6 +5,11 @@ import http from 'http';
 export let users={};
 
 http.createServer(function(req, res){
+    //get list of methods available in http request
+    console.log(http.METHODS);
+    //get all status code from http 
+    console.log(http.STATUS_CODES);
+    
     res.write("Hello world! at 8080");
     res.end();
 }).listen(7000);
