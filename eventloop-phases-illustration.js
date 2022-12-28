@@ -4,10 +4,10 @@
  * pending callbacks 
  * ideal, prepare - node js working phase
  * poll ---> continuously check incoming connection & network request, IO output/operations result
- * check---> it checks fro setImmediate
+ * check---> it checks for setImmediate
  * close callbacks 
 */
-const fs = require('fs');
+import fs from 'fs';
 
 process.nextTick(()=>{
    console.log('This is a process.next tick method callback - 1st'); 
@@ -26,7 +26,7 @@ setTimeout(() => {
 }, 0);
 
 //I/o Operation
-fs.readFile('test.txt', 'utf8', (err, data) => {
+fs.readFile('hello.txt', 'utf8', (err, data) => {
     if (err) {
         console.log(err);
     } else {
@@ -43,7 +43,12 @@ fs.readFile('test.txt', 'utf8', (err, data) => {
         }, 500);
     }
 });
+
 process.nextTick(()=>{
     console.log('This is a process.next tick method callback-2nd'); 
 });
- 
+
+//Promise.reject('Promise rejected!')
+Promise.resolve('promise resolved!')
+.then((res)=>{console.log('This is ', res);}) //for resolve, this will run 
+.catch((err)=>{console.log('catch',err);}) //for Reject, this will run 
