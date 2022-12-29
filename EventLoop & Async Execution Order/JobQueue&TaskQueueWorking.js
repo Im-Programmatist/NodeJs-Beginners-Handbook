@@ -1,3 +1,8 @@
+//https://blog.insiderattack.net/event-loop-and-the-big-picture-nodejs-event-loop-part-1-1cb67a182810
+//https://blog.insiderattack.net/javascript-event-loop-vs-node-js-event-loop-aea2b1b85f5c
+//https://www.jsv9000.app/ 
+//https://blog.insiderattack.net/timers-immediates-and-process-nexttick-nodejs-event-loop-part-2-2c53fd511bb3 
+
 const  JobAndTaskQueueWorkingPracticle = () =>{
     for(let i=0; i<3; i++) {
         setTimeout(() => {
