@@ -54,4 +54,3 @@ function myFunction(platform){
 console.log("Before the setTimeout call");
 let timerID = setTimeout(myFunction, 1000, "world");
 console.log("After the setTimeout call");
-
