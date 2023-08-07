@@ -1,0 +1,6 @@
+DOnt block Node Js Main Thread -
+1. using sync version in fs, crypto, zlib module in your callback function
+2. Don't  perform complex calculation(CPU intensive calculation/task)
+    eg. loops inside loops, 
+3. Be careful with JSON in large objects 
+4. Don't use too complex regular expressions eg. nested quantifiers  

@@ -7,6 +7,13 @@
  * check---> it checks for setImmediate
  * close callbacks 
 */
+
+/**
+ * Execution pattern of setImmediate, process.nextTick and setTimeout and setInterval as follows  --->
+ * polling phase (fetching/taking code top to bottom)--->check Phase -->execution phase 
+ * -->event loop initialization --->process.nextTick ---> setImmediate --->setTimeout/setInterval(based on the timer)
+*/
+
 import fs from 'fs';
 
 process.nextTick(()=>{
@@ -26,7 +33,7 @@ setTimeout(() => {
 }, 0);
 
 //I/o Operation
-fs.readFile('hello.txt', 'utf8', (err, data) => {
+fs.readFile('test.txt', 'utf8', (err, data) => {
     if (err) {
         console.log(err);
     } else {

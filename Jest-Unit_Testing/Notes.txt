@@ -1,0 +1,11 @@
+There are three main methods in this test file:
+
+describe() – It is a suite of Test scripts that gives an outer description for the test suite
+test() – It is the smallest unit test case that is written to be executed. String in quotes represents the test name
+expect() – It is an assertion. Every test() statement has an expect() function which takes a value and expects a return in true form.
+
+Types of Jest Matchers
+1. Equality
+2. Truthiness
+3. Number Matchers
+4. String Matchers

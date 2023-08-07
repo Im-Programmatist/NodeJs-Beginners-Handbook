@@ -5,8 +5,8 @@
  *  process.nextTick() - 
  *  new event queue of operations is initialized we can think of it as a new tick.
  *  So, process.nextTick() method adds the callback function to the start of the next event queue
- *  But when proccess.nextTick() method is called for the first time before the event loop is processed.
- *  Syntaxt - process.nextTick(callback);
+ *  But when process.nextTick() method is called for the first time before the event loop is processed.
+ *  Syntax - process.nextTick(callback);
  *  process.nextTick() is not technically part of the event loop. because it is not natively provided by the libuv, but implemented in Node.
  *  Instead, the nextTickQueue will be processed after the current operation is completed, 
  *  regardless of the current phase of the event loop
@@ -16,14 +16,14 @@
  *  process next tick goes in to the nextTickQueue rather than micro queue(it is attached to micro queue but other functions like promises have preference over it) where promises laid. 
  *  micro queue has more preference than nextTickQueue. () 
 /**
- * setImmdeiate() method: 
+ * setImmediate() method: 
  * Whenever we call setImmediate() method, it’s callback function is placed in the check phase of the next event queue. 
  * Note:- that setImmediate() method is called in the poll phase(fetching code to execution from top to down manner in js) 
  * and it’s callback functions are invoked in the check phase.
  * check phase : checks the setImmediate() callbacks are called here.
- * This function involked just after the last line of code execute in execution phace. 
+ * This function involved just after the last line of code execute in execution phase. 
  * Means after execution and initializing event loop callback queue this setImmediate method call
- * Syntaxt - setImmediate(callback);
+ * Syntax - setImmediate(callback);
 */
 
 /**
